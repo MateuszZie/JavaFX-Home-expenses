@@ -3,9 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <items>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="133.0" prefWidth="598.0">
          <children>
             <GridPane hgap="10.0" maxWidth="-Infinity" prefHeight="90.0" prefWidth="600.0">
               <columnConstraints>
@@ -29,9 +29,9 @@
                </children>
             </GridPane>
          </children></AnchorPane>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="323.0" prefWidth="598.0">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="2000.0">
          <children>
-            <TableView layoutX="-3.0" layoutY="-2.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="600.0">
+            <TableView layoutX="-3.0" layoutY="-2.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1000.0" prefWidth="2000.0">
               <columns>
                 <TableColumn prefWidth="75.0" text="C1" />
                 <TableColumn prefWidth="75.0" text="C2" />
