@@ -3,6 +3,7 @@ module Statement.of.monthly.food.expenses {
     requires javafx.fxml;
     requires javafx.controls;
     requires java.sql;
+    requires javafx.web;
     opens sample;
     opens sample.model;
 }

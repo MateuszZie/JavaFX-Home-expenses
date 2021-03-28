@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <items>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="133.0" prefWidth="598.0">
          <children>
@@ -22,19 +22,20 @@
                   <Label text="Value" />
                   <Label text="Description" GridPane.columnIndex="1" />
                   <Label prefWidth="27.0" text="Date" GridPane.columnIndex="2" />
-                  <TextField alignment="TOP_LEFT" GridPane.rowIndex="1" />
-                  <DatePicker GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Button mnemonicParsing="false" text="Add" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="valueTF" alignment="TOP_LEFT" GridPane.rowIndex="1" />
+                  <DatePicker fx:id="datePicker" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Button mnemonicParsing="false" onAction="#addRecipe" text="Add" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextArea fx:id="descriptionTA" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children></AnchorPane>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="2000.0">
          <children>
-            <TableView layoutX="-3.0" layoutY="-2.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1000.0" prefWidth="2000.0">
+            <TableView fx:id="tableView" layoutX="-3.0" layoutY="-2.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1000.0" prefWidth="2000.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="75.0" text="C2" />
+                <TableColumn fx:id="columnDate" prefWidth="75.0" text="Date" />
+                <TableColumn fx:id="columnValue" prefWidth="75.0" text="Value" />
+                  <TableColumn fx:id="columnDescription" prefWidth="400.0" text="Description" />
               </columns>
             </TableView>
          </children></AnchorPane>
