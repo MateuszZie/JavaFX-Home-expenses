@@ -1,18 +1,33 @@
 package sample.model;
 
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 
 public class Expenses {
+    private SimpleIntegerProperty _id;
     private SimpleDoubleProperty value;
     private SimpleStringProperty description;
     private SimpleStringProperty date;
 
     public Expenses() {
+        this._id= new SimpleIntegerProperty();
         this.value = new SimpleDoubleProperty();
         this.description = new SimpleStringProperty();
         this.date = new SimpleStringProperty();
+    }
+
+    public int get_id() {
+        return _id.get();
+    }
+
+    public SimpleIntegerProperty _idProperty() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id.set(_id);
     }
 
     public double getValue() {
