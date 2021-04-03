@@ -8,9 +8,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.model.Datasource;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-
 public class Main extends Application {
 
     @Override

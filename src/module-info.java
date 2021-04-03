@@ -6,4 +6,5 @@ module Statement.of.monthly.food.expenses {
     requires javafx.web;
     opens sample;
     opens sample.model;
+    opens sample.controller;
 }

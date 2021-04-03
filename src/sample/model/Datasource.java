@@ -16,6 +16,8 @@ public class Datasource {
 
     public static final String INSERT_INTO_EXPENSES = "insert into " + TABLE_EXPENSES + " ("+COLUMN_EXPENSES_DATE+", "+COLUMN_EXPENSES_VALUE+", "+COLUMN_EXPENSES_DESCRIPTION+
             ") values (?, ? ,?)";
+    public static final String UPDATE_EXPENSE = "update "+TABLE_EXPENSES +" set " + COLUMN_EXPENSES_VALUE + " = ? ,"+COLUMN_EXPENSES_DESCRIPTION + " = ? ,"+COLUMN_EXPENSES_DATE +
+            " = ? where " + COLUMN_EXPENSES_ID+" = ? ";
     public static final String DELETE_FROM_EXPENSES = "delete from " + TABLE_EXPENSES + " where " + COLUMN_EXPENSES_ID +" = ?";
     public static final String QUERY_ALL = "Select * from " +TABLE_EXPENSES + " order by " +COLUMN_EXPENSES_DATE + " collate nocase desc";
 
@@ -23,6 +25,7 @@ public class Datasource {
     private Statement statement;
     private PreparedStatement insertIntoExpenses;
     private PreparedStatement deleteFromExpenses;
+    private PreparedStatement updateExpenses;
 
     public static Datasource datasource = new Datasource();
     private Datasource(){}
@@ -37,6 +40,7 @@ public class Datasource {
                     + COLUMN_EXPENSES_DESCRIPTION +" text)");
             insertIntoExpenses = conn.prepareStatement(INSERT_INTO_EXPENSES, Statement.RETURN_GENERATED_KEYS);
             deleteFromExpenses = conn.prepareStatement(DELETE_FROM_EXPENSES);
+            updateExpenses = conn.prepareStatement(UPDATE_EXPENSE);
             return true;
         }catch (SQLException e){
             System.out.println("Can't connect to DB " +e.getMessage());
@@ -46,6 +50,9 @@ public class Datasource {
     }
     public void close(){
         try {
+            if(updateExpenses!=null){
+                updateExpenses.close();
+            }
             if(deleteFromExpenses!=null){
                 deleteFromExpenses.close();
             }
@@ -86,6 +93,7 @@ public class Datasource {
     public void deleteRecipe(int id){
     try {
         deleteFromExpenses.setInt(1,id);
+        deleteFromExpenses.execute();
     }catch (SQLException e){
         System.out.println("Delete recipe exception " + e.getMessage());
     }
@@ -101,5 +109,15 @@ public class Datasource {
             System.out.println("Insert Expenses exception " + e.getMessage());
         }
 
+    }
+    public void uploadExpenses(String date, double value, String description, int id){
+        try {
+            updateExpenses.setDouble(1,value);
+            updateExpenses.setString(2,description);
+            updateExpenses.setString(3,date);
+            updateExpenses.setInt(4,id);
+        }catch (SQLException e){
+            System.out.println("Update Expenses exception " + e.getMessage());
+        }
     }
 }

@@ -1,21 +1,24 @@
-package sample;
+package sample.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.ScrollEvent;
 import sample.model.Datasource;
 import sample.model.Expenses;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 
 public class Controller {
+    @FXML
+    private SplitPane splitPane;
     @FXML
     private TextField valueTF;
     @FXML
@@ -32,12 +35,19 @@ public class Controller {
     private TableColumn<Expenses, String> columnDescription;
     @FXML
     private Label incorrectVal;
+    @FXML
+    private ContextMenu contextMenu;
     private List<Expenses> expensesList;
 
     @FXML
     public void initialize(){
-        String test = "2011-02-31";
-        System.out.println(test.matches("^\\d{4}-[0-1]\\d-[0-3]\\d$"));
+        contextMenu = new ContextMenu();
+        MenuItem deleteItem = new MenuItem("Delete");
+        MenuItem updateItem = new MenuItem("Update");
+        deleteItem.setOnAction((e)-> deleteRecipe());
+        updateItem.setOnAction((e)-> updateRecipe());
+        contextMenu.getItems().addAll(updateItem,deleteItem);
+        tableView.setContextMenu(contextMenu);
         datePicker.setValue(LocalDate.now());
         expensesList = Datasource.getInstance().DataToTable();
         columnDate.setCellValueFactory(new PropertyValueFactory<>("date"));
@@ -57,7 +67,6 @@ public class Controller {
         if(descriptionTA.getText().isEmpty()) {
             descriptionTA.setText(" ");
         }
-                String description;
                 Datasource.getInstance().insertExpenses(datePicker.getValue().toString(),Double.parseDouble(valueTF.getText()),descriptionTA.getText());
                 Expenses expenses = new Expenses();
                 expenses.setValue(Double.parseDouble(valueTF.getText()));
@@ -66,15 +75,57 @@ public class Controller {
                 expensesList.add(expenses);
                 expensesList.sort((Expenses e, Expenses e2 ) -> e2.getDate().compareTo(e.getDate()));
                 new Thread(refresh()).start();
-                tableView.refresh();
                 valueTF.clear();
                 descriptionTA.clear();
                 incorrectVal.setVisible(false);
+                tableView.getSelectionModel().select(expenses);
         }
-        public void deleteRecipe(){
+        public void deleteRecipe() {
             Expenses expenses = tableView.getSelectionModel().getSelectedItem();
-            Datasource.getInstance().deleteRecipe(expenses.get_id());
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Recipe");
+            alert.setHeaderText("Are you sure??");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Datasource.getInstance().deleteRecipe(expenses.get_id());
+                expensesList.remove(expenses);
+                new Thread(refresh()).start();
+            }
         }
+    @FXML
+    public void updateRecipe(){
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(splitPane.getScene().getWindow());
+        dialog.setTitle("Update Recipe");
+        dialog.setHeaderText("Update");
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/sample/update.fxml"));
+        try {
+            dialog.getDialogPane().setContent(loader.load());
+        }catch (IOException e){
+            System.out.println("Couldn't load dialog");
+            e.printStackTrace();
+            return;
+        }
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        updateController controller = loader.getController();
+        Expenses expenses = tableView.getSelectionModel().getSelectedItem();
+        controller.setData(expenses.getValue(),expenses.getDescription(),expenses.getDate());
+        Optional<ButtonType> result = dialog.showAndWait();
+        if(result.isPresent() && result.get()==ButtonType.OK){
+            int _id = expenses.get_id();
+            Expenses update = controller.processResult(_id);
+            if(update!=null){
+                expensesList.set(_id,update);
+                new Thread(refresh()).start();
+                tableView.getSelectionModel().select(_id);
+            }
+        }
+    }
+
+
     private Task<ObservableList<Expenses>> refresh(){
         Task<ObservableList<Expenses>> task = new Task<ObservableList<Expenses>>() {
             @Override
