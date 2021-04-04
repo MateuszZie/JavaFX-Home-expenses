@@ -43,7 +43,7 @@ public class Controller {
     public void initialize(){
         contextMenu = new ContextMenu();
         MenuItem deleteItem = new MenuItem("Delete");
-        MenuItem updateItem = new MenuItem("Update");
+        MenuItem updateItem = new MenuItem("Edit");
         deleteItem.setOnAction((e)-> deleteRecipe());
         updateItem.setOnAction((e)-> updateRecipe());
         contextMenu.getItems().addAll(updateItem,deleteItem);
@@ -96,8 +96,8 @@ public class Controller {
     public void updateRecipe(){
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(splitPane.getScene().getWindow());
-        dialog.setTitle("Update Recipe");
-        dialog.setHeaderText("Update");
+        dialog.setTitle("Edit Recipe");
+        dialog.setHeaderText("Edit");
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/sample/update.fxml"));
         try {
@@ -115,12 +115,13 @@ public class Controller {
         controller.setData(expenses.getValue(),expenses.getDescription(),expenses.getDate());
         Optional<ButtonType> result = dialog.showAndWait();
         if(result.isPresent() && result.get()==ButtonType.OK){
-            int _id = expenses.get_id();
+
+            int _id = expensesList.indexOf(expenses);
             Expenses update = controller.processResult(_id);
             if(update!=null){
                 expensesList.set(_id,update);
                 new Thread(refresh()).start();
-                tableView.getSelectionModel().select(_id);
+                tableView.getSelectionModel().select(update);
             }
         }
     }

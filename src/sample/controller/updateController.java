@@ -6,6 +6,7 @@ import sample.model.Datasource;
 import sample.model.Expenses;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class updateController {
     @FXML
@@ -19,11 +20,12 @@ public class updateController {
     @FXML
     public Expenses processResult(int id){
         text.setText(text.getText().replace(",","."));
-        if(text.getText().isEmpty()|| !text.getText().matches("^\\d+(.\\d{1,2})?$")) {
+        if(text.getText().isEmpty() || !text.getText().matches("^\\d+(.\\d{1,2})?$")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Incorrect Value");
-            alert.setHeaderText("Update Fail");
+            alert.setHeaderText("Edit Fail");
             alert.setContentText("Entered value is incorrect pls try again");
+            alert.show();
             return null;
         }
         if(area.getText().isEmpty()) {

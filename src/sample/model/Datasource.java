@@ -28,10 +28,14 @@ public class Datasource {
     private PreparedStatement updateExpenses;
 
     public static Datasource datasource = new Datasource();
-    private Datasource(){}
+
+    private Datasource(){
+    }
     public static Datasource getInstance(){
         return datasource;
     }
+
+
     public boolean open(){
         try {
             conn = DriverManager.getConnection(CONNECTION_STRING);
@@ -116,6 +120,7 @@ public class Datasource {
             updateExpenses.setString(2,description);
             updateExpenses.setString(3,date);
             updateExpenses.setInt(4,id);
+            updateExpenses.execute();
         }catch (SQLException e){
             System.out.println("Update Expenses exception " + e.getMessage());
         }
