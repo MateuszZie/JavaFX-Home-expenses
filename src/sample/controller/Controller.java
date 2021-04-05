@@ -7,11 +7,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
 import sample.model.Datasource;
 import sample.model.Expenses;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +28,10 @@ public class Controller {
     @FXML
     private DatePicker datePicker;
     @FXML
+    private DatePicker nextDate;
+    @FXML
+    private DatePicker lastDate;
+    @FXML
     private TableView<Expenses> tableView;
     @FXML
     private TableColumn<Expenses, String> columnDate;
@@ -37,7 +43,14 @@ public class Controller {
     private Label incorrectVal;
     @FXML
     private ContextMenu contextMenu;
+    @FXML
+    private Label lastMonth;
+    @FXML
+    private Label thisMonth;
+    @FXML
+    private Label sum;
     private List<Expenses> expensesList;
+    private List<Expenses> periodList;
 
     @FXML
     public void initialize(){
@@ -53,7 +66,7 @@ public class Controller {
         columnDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         columnValue.setCellValueFactory(new PropertyValueFactory<>("value"));
         columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
-        new Thread(refresh()).start();
+        period();
 
     }
     @FXML
@@ -74,7 +87,7 @@ public class Controller {
                 expenses.setDescription(descriptionTA.getText());
                 expensesList.add(expenses);
                 expensesList.sort((Expenses e, Expenses e2 ) -> e2.getDate().compareTo(e.getDate()));
-                new Thread(refresh()).start();
+                period();
                 valueTF.clear();
                 descriptionTA.clear();
                 incorrectVal.setVisible(false);
@@ -89,7 +102,7 @@ public class Controller {
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 Datasource.getInstance().deleteRecipe(expenses.get_id());
                 expensesList.remove(expenses);
-                new Thread(refresh()).start();
+                period();
             }
         }
     @FXML
@@ -120,21 +133,78 @@ public class Controller {
             Expenses update = controller.processResult(_id);
             if(update!=null){
                 expensesList.set(_id,update);
-                new Thread(refresh()).start();
+                period();
                 tableView.getSelectionModel().select(update);
             }
         }
     }
 
 
-    private Task<ObservableList<Expenses>> refresh(){
+    private Task<ObservableList<Expenses>> refresh(List<Expenses> expenses){
         Task<ObservableList<Expenses>> task = new Task<ObservableList<Expenses>>() {
             @Override
             protected ObservableList<Expenses> call() throws Exception {
-                return FXCollections.observableArrayList(expensesList);
+                return FXCollections.observableArrayList(expenses);
             }
         };
         tableView.itemsProperty().bind(task.valueProperty());
+        setMonthValue();
         return task;
+    }
+    private void setMonthValue(){
+        String thisM = LocalDate.now().toString().substring(0,7);
+        String lastM = LocalDate.now().minusMonths(1).toString().substring(0,7);
+        double last = 0;
+        double now = 0;
+        for (Expenses expenses: expensesList){
+            if(expenses.getDate().substring(0,7).equals(thisM)){
+                now += expenses.getValue();
+            }
+            if(expenses.getDate().substring(0,7).equals(lastM)){
+                last += expenses.getValue();
+            }
+            lastMonth.setText(String.valueOf(last));
+            thisMonth.setText(String.valueOf(now));
+            if(now>last){
+                thisMonth.setTextFill(Color.RED);
+            }else thisMonth.setTextFill(Color.GREEN);
+        }
+
+    }
+    @FXML
+    private void period(){
+        double sumVal=0;
+        if(lastDate.getValue()==null && nextDate.getValue()==null){
+            sum.setVisible(false);
+            new Thread(refresh(expensesList)).start();
+            return;
+        }
+        periodList=new ArrayList<>();
+        sum.setVisible(true);
+        if(nextDate.getValue()==null){
+            for (Expenses expenses: expensesList){
+                if(expenses.getDate().compareTo(lastDate.getValue().toString())>=0){
+                    periodList.add(expenses);
+                    sumVal += expenses.getValue();
+                }
+            }
+        }else if(lastDate.getValue()==null) {
+            for (Expenses expenses : expensesList) {
+                if (expenses.getDate().compareTo(nextDate.getValue().toString()) <= 0) {
+                    periodList.add(expenses);
+                    sumVal += expenses.getValue();
+                }
+            }
+        }else {
+            for (Expenses expenses : expensesList) {
+                if (expenses.getDate().compareTo(nextDate.getValue().toString()) <= 0 && expenses.getDate().compareTo(lastDate.getValue().toString()) >= 0) {
+                    periodList.add(expenses);
+                    sumVal += expenses.getValue();
+                }
+
+            }
+        }
+            sum.setText(String.valueOf(sumVal));
+            new Thread(refresh(periodList)).start();
     }
 }

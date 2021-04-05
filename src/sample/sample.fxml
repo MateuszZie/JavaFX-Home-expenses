@@ -6,7 +6,7 @@
 
 <SplitPane fx:id="splitPane" dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Controller">
   <items>
-    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="133.0" prefWidth="598.0">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="137.0" prefWidth="598.0">
          <children>
             <GridPane hgap="10.0" maxWidth="-Infinity" prefHeight="90.0" prefWidth="600.0">
               <columnConstraints>
@@ -26,12 +26,18 @@
                   <Label text="Value" />
                   <Label text="Description" GridPane.columnIndex="1" />
                   <Label prefWidth="27.0" text="Date" GridPane.columnIndex="2" />
-                  <TextArea fx:id="descriptionTA" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextArea fx:id="descriptionTA" prefHeight="67.0" prefWidth="360.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets></TextArea>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
                      <children>
                         <TextField fx:id="valueTF" alignment="TOP_LEFT" />
                         <Label fx:id="incorrectVal" text="null" textFill="#d00d0d" visible="false" />
                      </children>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <children>
@@ -43,6 +49,60 @@
                         <Button mnemonicParsing="false" onAction="#addRecipe" text="Add" />
                      </children>
                   </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                     <children>
+                        <Label text="Last month">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </Label>
+                        <Label fx:id="lastMonth" text="Label" />
+                     </children>
+                  </VBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label text="This month" />
+                              <Label fx:id="thisMonth" text="Label" />
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label text=" Choose period" />
+                              <DatePicker fx:id="lastDate" prefWidth="100.0" />
+                              <Button mnemonicParsing="false" onAction="#period" text="Accept" />
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label text="Label" visible="false" />
+                              <DatePicker fx:id="nextDate" prefWidth="100.0" />
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox prefHeight="60.0" prefWidth="73.0">
+                           <children>
+                              <Label text="Sum" />
+                              <Label fx:id="sum" text="Label" visible="false" />
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                     <GridPane.margin>
+                        <Insets top="7.0" />
+                     </GridPane.margin>
+                  </HBox>
                </children>
                <opaqueInsets>
                   <Insets />
