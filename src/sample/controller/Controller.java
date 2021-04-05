@@ -3,19 +3,20 @@ package sample.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import sample.model.Datasource;
 import sample.model.Expenses;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 public class Controller {
@@ -54,6 +55,14 @@ public class Controller {
 
     @FXML
     public void initialize(){
+        valueTF.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent ke) {
+                if (ke.getCode().equals(KeyCode.ENTER)) {
+                    addRecipe();
+                }
+            }
+        });
         contextMenu = new ContextMenu();
         MenuItem deleteItem = new MenuItem("Delete");
         MenuItem updateItem = new MenuItem("Edit");
@@ -82,6 +91,11 @@ public class Controller {
         }
                 Datasource.getInstance().insertExpenses(datePicker.getValue().toString(),Double.parseDouble(valueTF.getText()),descriptionTA.getText());
                 Expenses expenses = new Expenses();
+                if(!expensesList.isEmpty()){
+                    expenses.set_id((Collections.max(expensesList).get_id()+1));
+                }else {
+                    expenses.set_id(1);
+                }
                 expenses.setValue(Double.parseDouble(valueTF.getText()));
                 expenses.setDate(datePicker.getValue().toString());
                 expenses.setDescription(descriptionTA.getText());
@@ -130,7 +144,7 @@ public class Controller {
         if(result.isPresent() && result.get()==ButtonType.OK){
 
             int _id = expensesList.indexOf(expenses);
-            Expenses update = controller.processResult(_id);
+            Expenses update = controller.processResult(expenses.get_id());
             if(update!=null){
                 expensesList.set(_id,update);
                 period();
@@ -163,13 +177,12 @@ public class Controller {
             if(expenses.getDate().substring(0,7).equals(lastM)){
                 last += expenses.getValue();
             }
-            lastMonth.setText(String.valueOf(last));
-            thisMonth.setText(String.valueOf(now));
-            if(now>last){
-                thisMonth.setTextFill(Color.RED);
-            }else thisMonth.setTextFill(Color.GREEN);
         }
-
+        lastMonth.setText(String.valueOf(last));
+        thisMonth.setText(String.valueOf(now));
+        if(now>last){
+            thisMonth.setTextFill(Color.RED);
+        }else thisMonth.setTextFill(Color.GREEN);
     }
     @FXML
     private void period(){

@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 
-public class Expenses {
+public class Expenses implements Comparable<Expenses>{
     private SimpleIntegerProperty _id;
     private SimpleDoubleProperty value;
     private SimpleStringProperty description;
@@ -16,6 +16,11 @@ public class Expenses {
         this.value = new SimpleDoubleProperty();
         this.description = new SimpleStringProperty();
         this.date = new SimpleStringProperty();
+    }
+
+    @Override
+    public int compareTo(Expenses o) {
+        return Integer.compare(this.get_id(),o.get_id());
     }
 
     public int get_id() {

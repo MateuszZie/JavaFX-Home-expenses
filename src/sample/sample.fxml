@@ -56,7 +56,7 @@
                               <Insets />
                            </opaqueInsets>
                         </Label>
-                        <Label fx:id="lastMonth" text="Label" />
+                        <Label fx:id="lastMonth" text="0" />
                      </children>
                   </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -64,7 +64,7 @@
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
                               <Label text="This month" />
-                              <Label fx:id="thisMonth" text="Label" />
+                              <Label fx:id="thisMonth" text="0" />
                            </children>
                            <HBox.margin>
                               <Insets />
