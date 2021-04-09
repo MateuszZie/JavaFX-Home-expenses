@@ -1,13 +1,14 @@
 package sample.model;
 
 
+import java.nio.file.FileSystems;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Datasource {
-    public static final String DB_NAME = "householdExpenses.db";
-    public static final String CONNECTION_STRING ="jdbc:sqlite:C:\\Users\\Mateusz\\IdeaProjects\\Statement of monthly food expenses\\"+DB_NAME;
+    public static final String DB_NAME = FileSystems.getDefault().getPath("householdExpenses.db").normalize().toAbsolutePath().toString();
+    public static final String CONNECTION_STRING ="jdbc:sqlite:"+DB_NAME;
     public static final String TABLE_EXPENSES = "expenses";
     public static final String COLUMN_EXPENSES_ID = "_id";
     public static final String COLUMN_EXPENSES_DATE = "date";
